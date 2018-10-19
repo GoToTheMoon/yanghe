@@ -1,0 +1,56 @@
+<datasets>
+    <dataset name="userdigestdone" frequency="${coord:days(1)}" initial-instance="2015-01-01T00:00+0800" timezone="UTC">
+        <uri-template>${nameNode}/user/tracking/userdigest/export/export_${YEAR}-${MONTH}-${DAY}_inc.done</uri-template>
+        <done-flag></done-flag>
+        <!-- 当天的日期，实际实昨天的数据 ,以外上面路径存在未前提-->
+    </dataset>
+
+    <dataset name="inputUserdigest" frequency="${coord:days(1)}" initial-instance="2015-01-01T00:00+0800" timezone="UTC">
+        <uri-template>/user/tracking/userdigest/export/userdigest_export_${YEAR}-${MONTH}-${DAY}_ucld_inc.txt.gz</uri-template>
+        <done-flag></done-flag>
+        <!-- 当天的日期，实际实昨天的数据 ,以外上面路径存在未前提-->
+    </dataset>
+    <dataset name="inputUserdigestTmp" frequency="${coord:days(1)}" initial-instance="2015-01-01T00:00+0800" timezone="UTC">
+        <uri-template>/tmp/mapred/userdigest/export/ucld/</uri-template>
+        <!-- 默认success为准-->
+    </dataset>
+    <dataset name="inputCM" frequency="${coord:days(1)}" initial-instance="2015-01-01T00:00+0800" timezone="UTC">
+        <uri-template>${nameNode}/user/dsp/warehouse/logdata.db/cm/dateline=${YEAR}${MONTH}${DAY}/</uri-template>
+        <!--默认 以succes文件为前提 -->
+    </dataset>
+    <dataset name="inputDspTT" frequency="${coord:days(1)}" initial-instance="2015-01-01T00:00+0800" timezone="UTC">
+        <uri-template>${nameNode}/user/dsp/warehouse/logdata.db/dsptt/dateline=${YEAR}${MONTH}${DAY}/</uri-template>
+        <!--默认 以succes文件为前提 -->
+    </dataset>
+
+    <dataset name="inputDspShowCm" frequency="${coord:days(1)}" initial-instance="2015-01-01T00:00+0800" timezone="UTC">
+        <uri-template>${nameNode}/user/${userName}/yangheShow/dateline=${YEAR}${MONTH}${DAY}/</uri-template>
+        <!--默认 以succes文件为前提 -->
+    </dataset>
+
+    <dataset name="inputDspShowCmIp" frequency="${coord:days(1)}" initial-instance="2015-01-01T00:00+0800" timezone="UTC">
+        <uri-template>${nameNode}/user/${userName}/yangheShowIp/dateline=${YEAR}${MONTH}${DAY}/</uri-template>
+        <!--默认 以succes文件为前提 -->
+    </dataset>
+
+    <dataset name="inputAd3" frequency="${coord:days(1)}" initial-instance="2015-01-01T00:00+0800" timezone="UTC">
+        <uri-template>${nameNode}/user/dsp/warehouse/dsp_report.db/ad3/dateline=${YEAR}${MONTH}${DAY}23/</uri-template>
+        <!--默认 以succes文件为前提 -->
+    </dataset>
+
+    <dataset name="outputYanghe" frequency="${coord:days(1)}" initial-instance="2015-01-01T00:00+0800" timezone="UTC">
+        <uri-template>${nameNode}/user/${userName}/yangheTT/dateline=${YEAR}${MONTH}${DAY}/</uri-template>
+    </dataset>
+    <dataset name="outputYangheIp" frequency="${coord:days(1)}" initial-instance="2015-01-01T00:00+0800" timezone="UTC">
+        <uri-template>${nameNode}/user/${userName}/yangheTTIp/dateline=${YEAR}${MONTH}${DAY}/</uri-template>
+    </dataset>
+
+    <dataset name="inputPv" frequency="${coord:days(1)}" initial-instance="2015-01-01T00:00+0800" timezone="UTC">
+        <uri-template>${nameNode}/user/dsp/warehouse/logdata.db/pv/dateline=${YEAR}${MONTH}${DAY}/</uri-template>
+        <!--默认 以succes文件为前提 -->
+    </dataset>
+    <dataset name="outputYanghePv" frequency="${coord:days(1)}" initial-instance="2015-01-01T00:00+0800" timezone="UTC">
+        <uri-template>${nameNode}/user/${userName}/yangheTTPv/dateline=${YEAR}${MONTH}${DAY}/</uri-template>
+    </dataset>
+
+</datasets>

@@ -1,0 +1,147 @@
+<coordinator-app name="yanghe_day" frequency="${coord:days(1)}" start="${starttime}" end="${endtime}" timezone="UTC" xmlns="uri:oozie:coordinator:0.2">
+    <controls>
+        <timeout>5760</timeout>
+        <concurrency>1</concurrency>
+    </controls>
+
+    <datasets>
+        <include>${nameNode}/user/${userName}/${appRoot}/coordinator/dataset.xml</include>
+    </datasets>
+
+    <input-events>
+        <data-in name="userdigestdone" dataset="userdigestdone">
+            <start-instance>${coord:current(0)}</start-instance>
+            <end-instance>${coord:current(0)}</end-instance>
+            <!-- 当天 -->
+        </data-in>
+        <data-in name="inputUserdigest" dataset="inputUserdigest">
+            <start-instance>${coord:current(0)}</start-instance>
+            <end-instance>${coord:current(0)}</end-instance>
+            <!-- 当天 只个标示表示tmp下的数据是今天的，因为tmp目录没有日期-->
+        </data-in>
+        <data-in name="inputUserdigestTmp" dataset="inputUserdigestTmp">
+            <start-instance>${coord:current(0)}</start-instance>
+            <end-instance>${coord:current(0)}</end-instance>
+            <!-- 当天,实际使用这个分散多份的Userdigest -->
+        </data-in>
+        <data-in name="inputCM" dataset="inputCM">
+            <start-instance>${coord:current(-7)}</start-instance>
+            <end-instance>${coord:current(-1)}</end-instance>
+        </data-in>
+        <data-in name="inputDspTT" dataset="inputDspTT">
+            <start-instance>${coord:current(-1)}</start-instance>
+            <end-instance>${coord:current(-1)}</end-instance>
+        </data-in>
+        <data-in name="inputDspShowCm" dataset="inputDspShowCm">
+            <start-instance>${coord:current(-1)}</start-instance>
+            <end-instance>${coord:current(-1)}</end-instance>
+        </data-in>
+        <data-in name="inputDspShowCmIp" dataset="inputDspShowCmIp">
+            <start-instance>${coord:current(-1)}</start-instance>
+            <end-instance>${coord:current(-1)}</end-instance>
+        </data-in>
+
+        <data-in name="inputAd3" dataset="inputAd3">
+            <start-instance>${coord:current(-1)}</start-instance>
+            <end-instance>${coord:current(-1)}</end-instance>
+        </data-in>
+        <data-in name="inputPv" dataset="inputPv">
+            <start-instance>${coord:current(-1)}</start-instance>
+            <end-instance>${coord:current(-1)}</end-instance>
+        </data-in>
+    </input-events>
+
+    <output-events>
+        <data-out name="outputdir" dataset="outputYanghe">
+            <instance>${coord:current(-1)}</instance>
+        </data-out>
+
+        <data-out name="outputdirIp" dataset="outputYangheIp">
+            <instance>${coord:current(-1)}</instance>
+        </data-out>
+        <data-out name="outputdirPv" dataset="outputYanghePv">
+            <instance>${coord:current(-1)}</instance>
+        </data-out>
+
+        <data-out name="deleteoutOldData" dataset="outputYanghe">
+            <instance>${coord:current(-10)}</instance>
+        </data-out>
+    </output-events>
+
+    <action>
+        <workflow>
+            <app-path>${nameNode}/user/${userName}/${appRoot}/workflow/yanghe_day.xml</app-path>
+            <configuration>
+                <property>
+                    <name>jobTracker</name>
+                    <value>${jobTracker}</value>
+                </property>
+                <property>
+                    <name>nameNode</name>
+                    <value>${nameNode}</value>
+                </property>
+                <property>
+                    <name>inputDirUserDigest</name>
+                    <value>${coord:dataIn('inputUserdigest')}</value>
+                </property>
+                <property>
+                    <name>inputDirUserDigestTmp</name>
+                    <value>${coord:dataIn('inputUserdigestTmp')}</value>
+                </property>
+                <property>
+                    <name>inputDirCM</name>
+                    <value>${coord:dataIn('inputCM')}</value>
+                </property>
+                <property>
+                    <name>inputDirDspTT</name>
+                    <value>${coord:dataIn('inputDspTT')}</value>
+                </property>
+                <property>
+                    <name>inputDirDspShowCm</name>
+                    <value>${coord:dataIn('inputDspShowCm')}</value>
+                </property>
+                <property>
+                    <name>inputDirAd3</name>
+                    <value>${coord:dataIn('inputAd3')}</value>
+                </property>
+                <property>
+                    <name>inputDirPv</name>
+                    <value>${coord:dataIn('inputPv')}</value>
+                </property>
+                <property>
+                    <name>outputdir</name>
+                    <value>${coord:dataOut('outputdir')}</value>
+                </property>
+                <property>
+                    <name>deleteoutOldData</name>
+                    <value>${coord:dataOut('deleteoutOldData')}</value>
+                </property>
+                <property>
+                    <name>inputDirDspShowCmIp</name>
+                    <value>${coord:dataIn('inputDspShowCmIp')}</value>
+                </property>
+                <property>
+                    <name>outputdirIp</name>
+                    <value>${coord:dataOut('outputdirIp')}</value>
+                </property>
+                <property>
+                    <name>outputdirPv</name>
+                    <value>${coord:dataOut('outputdirPv')}</value>
+                </property>
+
+                <property>
+                    <name>channelName</name>
+                    <value>YangHe</value>
+                </property>
+                <property>
+                    <name>dspttReg</name>
+                    <value>X:BE,C:18210,M:DSPTT,V:1,T:${coord:formatTime(coord:dateOffset(coord:nominalTime(),-1,'DAY'), 'yyMMdd')}</value>
+                </property>
+                <property>
+                    <name>selectCid</name>
+                    <value>18210</value>
+                </property>
+            </configuration>
+        </workflow>
+    </action>
+</coordinator-app>

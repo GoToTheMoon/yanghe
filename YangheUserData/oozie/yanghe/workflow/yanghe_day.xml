@@ -1,0 +1,38 @@
+
+<workflow-app xmlns="uri:oozie:workflow:0.3" name="yanghe_day">
+    <start to="pigAction"/>
+
+    <action name="pigAction">
+        <pig>
+            <job-tracker>${jobTracker}</job-tracker>
+            <name-node>${nameNode}</name-node>
+            <prepare>
+                <delete path="${deleteoutOldData}"/>
+                <delete path="${outputdir}"/>
+                <delete path="${outputdirIp}"/>
+                <delete path="${outputdirPv}"/>
+            </prepare>
+            <script>./pig/yanghe.pig</script>
+            <param>inputDirUserDigest=${inputDirUserDigest}</param>
+            <param>inputDirUserDigestTmp=${inputDirUserDigestTmp}</param>
+            <param>inputDirCM=${inputDirCM}</param>
+            <param>inputDirDspTT=${inputDirDspTT}</param>
+            <param>inputDirDspShowCm=${inputDirDspShowCm}</param>
+            <param>inputDirAd3=${inputDirAd3}</param>
+            <param>outputdir=${outputdir}</param>
+            <param>channelName=${channelName}</param>
+            <param>dspttReg=${dspttReg}</param>
+            <param>selectCid=${selectCid}</param>
+            <param>inputDirDspShowCmIp=${inputDirDspShowCmIp}</param>
+            <param>outputdirIp=${outputdirIp}</param>
+            <param>outputdirPv=${outputdirPv}</param>
+            <param>inputDirPv=${inputDirPv}</param>
+        </pig>
+        <ok to="end"/>
+        <error to="fail"/>
+    </action>
+    <kill name="fail">
+        <message>Action failed, error message[${wf:errorMessage(wf:lastErrorNode())}]</message>
+    </kill>
+    <end name="end"/>
+</workflow-app>

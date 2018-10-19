@@ -1,0 +1,81 @@
+<coordinator-app name="yangheShow_day" frequency="${coord:days(1)}" start="${starttime}" end="${endtime}" timezone="UTC" xmlns="uri:oozie:coordinator:0.2">
+    <controls>
+        <timeout>5760</timeout> 
+        <concurrency>1</concurrency>
+    </controls>
+
+    <datasets>
+        <include>${nameNode}/user/${userName}/${appRoot}/coordinator/dataset.xml</include>
+    </datasets>
+
+    <input-events>
+        <data-in name="inputCM" dataset="inputCM">
+            <start-instance>${coord:current(-7)}</start-instance>
+            <end-instance>${coord:current(-1)}</end-instance>
+        </data-in>
+
+        <data-in name="inputDspShow" dataset="inputDspShow">
+            <start-instance>${coord:current(-1)}</start-instance>
+            <end-instance>${coord:current(-1)}</end-instance>
+        </data-in>
+
+    </input-events>
+
+    <output-events>
+    
+        <data-out name="outputdirShow" dataset="outputYangheShow">
+            <instance>${coord:current(-1)}</instance>       
+        </data-out>       
+        <data-out name="deleteoutOldDataShow" dataset="outputYangheShow">
+            <instance>${coord:current(-10)}</instance>
+        </data-out>
+        <data-out name="outputdirShowIp" dataset="outputYangheShowIp">
+            <instance>${coord:current(-1)}</instance>
+        </data-out>
+
+    </output-events>
+
+    <action>
+        <workflow>
+            <app-path>${nameNode}/user/${userName}/${appRoot}/workflow/yanghe_day.xml</app-path>
+            <configuration>
+                <property>
+                    <name>jobTracker</name>
+                    <value>${jobTracker}</value>
+                </property>
+                <property>
+                    <name>nameNode</name>
+                    <value>${nameNode}</value>
+                </property>
+                <property>
+                    <name>inputDirCM</name>
+                    <value>${coord:dataIn('inputCM')}</value>
+                </property>
+                <property>
+                    <name>inputDirDspShow</name>
+                    <value>${coord:dataIn('inputDspShow')}</value>
+                </property>
+                <property>
+                    <name>outputdirShow</name>
+                    <value>${coord:dataOut('outputdirShow')}</value>
+                </property>
+                 <property>
+                    <name>deleteoutOldDataShow</name>
+                    <value>${coord:dataOut('deleteoutOldDataShow')}</value>
+                </property>
+                <property>
+                    <name>channelName</name>
+                    <value>YangHe</value>
+                </property>
+                <property>
+                    <name>selectCid</name>
+                    <value>18210</value>
+                </property>
+                <property>
+                    <name>outputdirShowIp</name>
+                    <value>${coord:dataOut('outputdirShowIp')}</value>
+                </property>
+            </configuration>
+        </workflow>
+    </action>
+</coordinator-app>

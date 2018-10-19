@@ -1,0 +1,28 @@
+
+<workflow-app xmlns="uri:oozie:workflow:0.3" name="yangheShow_day">
+    <start to="pigAction"/>
+
+    <action name="pigAction">
+         <pig>
+            <job-tracker>${jobTracker}</job-tracker>
+            <name-node>${nameNode}</name-node>
+            <prepare>
+                <delete path="${deleteoutOldDataShow}"/>
+                <delete path="${outputdirShow}"/>
+            </prepare>
+            <script>./pig/yangheShow.pig</script>
+            <param>inputDirCM=${inputDirCM}</param>
+            <param>inputDirDspShow=${inputDirDspShow}</param>
+            <param>outputdirShow=${outputdirShow}</param>
+            <param>channelName=${channelName}</param>
+            <param>selectCid=${selectCid}</param>
+             <param>outputdirShowIp=${outputdirShowIp}</param>
+        </pig>
+        <ok to="end"/>
+        <error to="fail"/>
+    </action>
+    <kill name="fail">
+        <message>Action failed, error message[${wf:errorMessage(wf:lastErrorNode())}]</message>
+    </kill>
+    <end name="end"/>
+</workflow-app>
